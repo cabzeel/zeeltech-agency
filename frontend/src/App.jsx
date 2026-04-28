@@ -13,6 +13,7 @@ import BlogPost from './pages/BlogPost'
 import Pricing from './pages/Pricing'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
+import ZeeltechAdmin from './pages/ZeeltechAdmin'
 
 export default function App() {
   const location = useLocation()
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/blog/:slug"        element={<BlogPost />} />
           <Route path="/pricing"           element={<Pricing />} />
           <Route path="/contact"           element={<Contact />} />
+          <Route path='/admin'             element={<ZeeltechAdmin />} />
           <Route path="*"                  element={<NotFound />} />
         </Routes>
       </AnimatePresence>

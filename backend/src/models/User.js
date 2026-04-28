@@ -31,19 +31,25 @@ const userSchema = new Schema(
     role: {
       type: Schema.Types.ObjectId,
       ref: "Role",
-      default: "reader",
+      default: null, // ✅ fixed: no invalid string default
     },
     isActive: {
       type: Boolean,
       default: true,
     },
-    lastLogin: Date,
-    resetPasswordToken: String,
-    resetPasswordExpire: Date,
+    lastLogin: {
+      type: Date,
+    },
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpire: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 const User = model("User", userSchema);

@@ -131,7 +131,7 @@ export default function Home() {
             </motion.div>
 
             {/* Logos */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
               style={{ marginTop: '4rem' }}
             >
@@ -141,7 +141,7 @@ export default function Home() {
                   <span key={name} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-dim)', fontWeight: 600, letterSpacing: '0.05em' }}>{name}</span>
                 ))}
               </div>
-            </motion.div>
+            </motion.div> */}
           </motion.div>
         </div>
 
@@ -159,9 +159,9 @@ export default function Home() {
       <section style={{ padding: '4rem 0', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', background: 'var(--bg-1)' }}>
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem' }}>
-            <Counter end={50}  suffix="+" label="Projects Delivered" />
-            <Counter end={30}  suffix="+"  label="Happy Clients" />
-            <Counter end={8}   suffix="+"  label="Years Experience" />
+            <Counter end={20}  suffix="+" label="Projects Delivered" />
+            <Counter end={15}  suffix="+"  label="Happy Clients" />
+            <Counter end={5}   suffix="+"  label="Years Experience" />
             <Counter end={100} suffix="%" label="Client Satisfaction" />
           </div>
         </div>
