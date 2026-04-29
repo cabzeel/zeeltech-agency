@@ -160,7 +160,6 @@ export default function Home() {
         <div className="container">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem' }}>
             <Counter end={20}  suffix="+" label="Projects Delivered" />
-            <Counter end={15}  suffix="+"  label="Happy Clients" />
             <Counter end={5}   suffix="+"  label="Years Experience" />
             <Counter end={100} suffix="%" label="Client Satisfaction" />
           </div>
@@ -287,7 +286,6 @@ function FeaturedProjects() {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '1.5rem' }}>
       {(projects.length ? projects : Array(2).fill(null)).map((p, i) => {
-        const [ref, inView] = [useState(null), { inView: true }]
         return (
           <motion.div key={p?._id || i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15, duration: 0.6 }}>
             {!p ? (

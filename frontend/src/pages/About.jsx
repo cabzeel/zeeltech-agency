@@ -55,7 +55,7 @@ export default function About() {
                 Every project we take on is an opportunity to do something excellent. We don't ship mediocre work — we craft solutions that stand the test of time and drive measurable results.
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                {[['50+', 'Projects'], ['8+', 'Years'], ['30+', 'Clients'], ['4', 'Countries']].map(([n, l]) => (
+                {[['20+', 'Projects'], ['5+', 'Years'], ['4', 'Countries']].map(([n, l]) => (
                   <div key={l} className="glass-gold" style={{ padding: '1.25rem', textAlign: 'center' }}>
                     <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.5rem', fontWeight: 600, color: 'var(--gold)' }}>{n}</div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-muted)', letterSpacing: '0.05em' }}>{l}</div>

@@ -34,7 +34,6 @@ const projectSchema = new Schema({
     timeline: {
         startDate: {
             type: Date,
-            required: true
         },
         endDate: {
             type: Date
@@ -102,6 +101,11 @@ const projectSchema = new Schema({
     ],
 
     cta: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    url: {
         type: String,
         required: true,
         trim: true
