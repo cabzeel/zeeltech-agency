@@ -140,7 +140,7 @@ export default function ProjectDetail() {
         <div style={{ textAlign:'center',padding:'3rem',background:'var(--bg-2)',borderRadius:'var(--radius-lg)',border:'1px solid var(--border)' }}>
           <h3 style={{ fontFamily:'var(--font-mono)',marginBottom:'0.75rem' }}>Want Similar Results?</h3>
           <p style={{ marginBottom:'2rem',maxWidth:400,margin:'0 auto 2rem' }}>Let's discuss how we can build something this impactful for your business.</p>
-          <a href={p.link} target='_blank' className="btn btn-gold">{p.cta || 'Start a Project'} <FiArrowRight/></a>
+          <a href={p.url} target='_blank' className="btn btn-gold">{p.cta || 'Start a Project'} <FiArrowRight/></a>
         </div>
       </div>
 

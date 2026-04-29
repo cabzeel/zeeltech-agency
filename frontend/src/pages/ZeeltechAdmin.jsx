@@ -98,7 +98,7 @@ const FIELDS = {
     { k: "description",label: "Description",  type: "textarea", req: true, span: true },
     { k: "problem",    label: "Problem",      type: "textarea", req: true, span: true },
     { k: "solution",   label: "Solution",     type: "textarea", req: true, span: true },
-    { k: "link",       label: "Link",         type: "textarea", req: true, span: true },
+    { k: "url",       label: "Url",         type: "textarea", req: true, span: true },
     { k: "cta",        label: "CTA Text",     type: "text",     req: true },
     { k: "category",   label: "Category ID",  type: "text",     req: true },
     { k: "status",     label: "Status",       type: "select",   opts: ["ongoing","completed","on-hold"] },
