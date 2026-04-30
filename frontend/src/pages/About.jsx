@@ -16,7 +16,8 @@ const values = [
 
 export default function About() {
   const [team, setTeam] = useState([])
-  useEffect(() => { api.get('/team?isVisible=true').then(r => setTeam(r.data.data)).catch(() => {}) }, [])
+  useEffect(() => { api.get('/team?isVisible=true').then(r => setTeam(r.data?.data ?? [])).catch(() => {})
+ }, [])
 
   return (
     <PageWrapper>
