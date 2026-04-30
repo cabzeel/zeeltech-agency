@@ -72,7 +72,7 @@ export default function Home() {
   const heroY = useTransform(scrollY, [0, 500], [0, 80])
 
   useEffect(() => {
-    api.get('/services?status=active&limit=4').then(r => setServices(r.data.data)).catch(() => {})
+    api.get('/services?status=active&limit=3').then(r => setServices(r.data.data)).catch(() => {})
     api.get('/testimonials?status=approved&isFeatured=true').then(r => setTestimonials(r.data.data)).catch(() => {})
     api.get('/blogs?status=published&limit=3').then(r => setBlogs(r.data.data)).catch(() => {})
   }, [])
@@ -175,8 +175,8 @@ export default function Home() {
             title="Services Built for |Digital Growth|"
             subtitle="From concept to launch, we offer end-to-end digital services that transform your vision into a high-performing reality."
           />
-          <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
-            {(services.length ? services : Array(4).fill(null)).map((s, i) => (
+          <div className="home-services-grid">
+            {(services.length ? services : Array(3).fill(null)).map((s, i) => (
               <ServiceCard key={s?._id || i} service={s} index={i} icon={icons[s?.slug]} />
             ))}
           </div>
@@ -212,7 +212,7 @@ export default function Home() {
         <section className="section" style={{ background: 'var(--bg-1)' }}>
           <div className="container">
             <SectionHeader label="Latest Insights" title="From the |Blog|" subtitle="Tips, trends and deep-dives from our team." />
-            <div className="grid-3">
+            <div className="home-blog-grid">
               {blogs.map((b, i) => <BlogCard key={b._id} b={b} index={i} />)}
             </div>
             <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
@@ -241,13 +241,28 @@ export default function Home() {
 
       <style>{`
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-        @media(max-width:640px){
-          .services-grid { grid-template-columns: 1fr !important; }
-          div[style*="grid-template-columns: repeat(2,1fr)"] { grid-template-columns: 1fr !important; }
-          div[style*="repeat(4, 1fr)"] { grid-template-columns: 1fr 1fr !important; }
+
+        .home-services-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.25rem;
         }
-        @media(max-width:900px){
-          .services-grid { grid-template-columns: 1fr 1fr !important; }
+        .home-blog-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.5rem;
+          align-items: stretch;
+        }
+
+        @media(max-width: 900px) {
+          .home-services-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .home-blog-grid { grid-template-columns: repeat(2, 1fr) !important; }
+        }
+        @media(max-width: 580px) {
+          .home-services-grid { grid-template-columns: 1fr !important; }
+          .home-blog-grid { grid-template-columns: 1fr !important; }
+          div[style*="repeat(4, 1fr)"] { grid-template-columns: repeat(2, 1fr) !important; }
+          div[style*="repeat(2,1fr)"] { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </PageWrapper>
@@ -374,20 +389,60 @@ function BlogCard({ b, index }) {
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
+      style={{ height: '100%' }}
     >
-      <Link to={`/blog/${b.slug}`} className="card" style={{ display: 'block' }}>
-        <div style={{ height: 180, overflow: 'hidden' }}>
-          <img src={b.coverImage} alt={b.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
-            onMouseOver={e => e.target.style.transform = 'scale(1.05)'}
+      <Link to={`/blog/${b.slug}`} className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%', textDecoration: 'none', overflow: 'hidden' }}>
+        {/* Image */}
+        <div style={{ position: 'relative', height: 200, overflow: 'hidden', flexShrink: 0 }}>
+          <img
+            src={b.coverImage} alt={b.title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
+            onMouseOver={e => e.target.style.transform = 'scale(1.06)'}
             onMouseOut={e => e.target.style.transform = 'scale(1)'}
           />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,8,8,0.5) 0%, transparent 60%)' }} />
+          {b.category?.name && (
+            <div style={{ position: 'absolute', bottom: '0.75rem', left: '0.75rem' }}>
+              <span className="tag">{b.category.name}</span>
+            </div>
+          )}
         </div>
-        <div style={{ padding: '1.25rem' }}>
-          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
-            <span className="tag">{b.readTime} min read</span>
+
+        {/* Body */}
+        <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, gap: '0.6rem' }}>
+          {/* Meta row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.75rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+              ⏱ {b.readTime} min read
+            </span>
+            {b.publishedAt && (
+              <span>{new Date(b.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            )}
           </div>
-          <h4 style={{ color: 'var(--text)', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.95rem', lineHeight: 1.5 }}>{b.title}</h4>
-          <p style={{ fontSize: '0.82rem', lineHeight: 1.7 }}>{b.excerpt.slice(0, 100)}...</p>
+
+          {/* Title */}
+          <h4 style={{ color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: '0.97rem', fontWeight: 600, lineHeight: 1.5, margin: 0 }}>
+            {b.title}
+          </h4>
+
+          {/* Excerpt */}
+          <p style={{ fontSize: '0.83rem', lineHeight: 1.75, color: 'var(--text-muted)', margin: 0, flex: 1 }}>
+            {b.excerpt?.slice(0, 110)}...
+          </p>
+
+          {/* Tags */}
+          {b.tags?.length > 0 && (
+            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
+              {b.tags.slice(0, 3).map(t => (
+                <span key={t} className="tag" style={{ fontSize: '0.68rem' }}>{t}</span>
+              ))}
+            </div>
+          )}
+
+          {/* Read more */}
+          <div style={{ marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--gold)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 500 }}>
+            Read article <FiArrowRight size={13} />
+          </div>
         </div>
       </Link>
     </motion.div>
