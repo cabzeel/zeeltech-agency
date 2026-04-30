@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-const BASE = import.meta.env.VITE_BACKEND_URL;
+const BASE = 'https://zeeltech.vercel.app';
 
 async function api(path, token, { method = "GET", body, params } = {}) {
   let url = `${BASE}${path}`;
