@@ -8,6 +8,48 @@ import PageWrapper from '../components/ui/PageWrapper'
 import SectionHeader from '../components/ui/SectionHeader'
 import api from '../utils/api'
 
+/* ─── Responsive grid styles injected once ───────────────────────────── */
+const GRID_STYLES = `
+  .zt-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .zt-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .zt-grid-services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .zt-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  @media (max-width: 1024px) {
+    .zt-grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .zt-grid-services { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .zt-grid-3 { grid-template-columns: 1fr; }
+    .zt-grid-2 { grid-template-columns: 1fr; }
+    .zt-grid-services { grid-template-columns: 1fr; }
+    .zt-stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .zt-stats-grid { grid-template-columns: 1fr; }
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+`
+
 /* ─── Animated counter ───────────────────────────────────────────────── */
 function Counter({ end, suffix = '', label }) {
   const [count, setCount] = useState(0)
@@ -37,7 +79,12 @@ function Counter({ end, suffix = '', label }) {
 }
 
 /* ─── Service icon map ───────────────────────────────────────────────── */
-const icons = { 'web-development': <FiCode />, 'mobile-app-development': <FiSmartphone />, 'ui-ux-design': <FiLayout />, 'digital-marketing': <FiTrendingUp /> }
+const icons = {
+  'web-development': <FiCode />,
+  'mobile-app-development': <FiSmartphone />,
+  'ui-ux-design': <FiLayout />,
+  'digital-marketing': <FiTrendingUp />
+}
 
 /* ─── Floating particle background ──────────────────────────────────── */
 function HeroParticles() {
@@ -72,6 +119,7 @@ export default function Home() {
   const heroY = useTransform(scrollY, [0, 500], [0, 80])
 
   useEffect(() => {
+    // Fetch only 3 services for the homepage
     api.get('/services?status=active&limit=3').then(r => setServices(r.data.data)).catch(() => {})
     api.get('/testimonials?status=approved&isFeatured=true').then(r => setTestimonials(r.data.data)).catch(() => {})
     api.get('/blogs?status=published&limit=3').then(r => setBlogs(r.data.data)).catch(() => {})
@@ -84,9 +132,10 @@ export default function Home() {
         <meta name="description" content="Full-service digital agency specialising in web development, mobile apps, UI/UX design and digital marketing." />
       </Helmet>
 
+      <style>{GRID_STYLES}</style>
+
       {/* ── HERO ── */}
       <section style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-        {/* Background */}
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(240,180,41,0.08) 0%, transparent 60%)' }} />
         <div className="orb" style={{ width: 600, height: 600, background: 'var(--gold)', left: '60%', top: '-10%' }} />
         <div className="orb" style={{ width: 400, height: 400, background: '#a855f7', left: '-5%', top: '40%', opacity: 0.1 }} />
@@ -129,19 +178,6 @@ export default function Home() {
                 View Our Work
               </Link>
             </motion.div>
-
-            {/* Logos */}
-            {/* <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
-              style={{ marginTop: '4rem' }}
-            >
-              <p style={{ fontSize: '0.75rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '1rem', fontFamily: 'var(--font-mono)' }}>Trusted by teams at</p>
-              <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', alignItems: 'center' }}>
-                {['ShopWave', 'TaskFlow', 'MedConnect', 'BrandBoost'].map(name => (
-                  <span key={name} style={{ fontFamily: 'var(--font-mono)', fontSize: '0.85rem', color: 'var(--text-dim)', fontWeight: 600, letterSpacing: '0.05em' }}>{name}</span>
-                ))}
-              </div>
-            </motion.div> */}
           </motion.div>
         </div>
 
@@ -158,13 +194,12 @@ export default function Home() {
       {/* ── STATS ── */}
       <section style={{ padding: '4rem 0', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', background: 'var(--bg-1)' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem' }}>
+          <div className="zt-stats-grid">
             <Counter end={20}  suffix="+" label="Projects Delivered" />
             <Counter end={5}   suffix="+"  label="Years Experience" />
             <Counter end={100} suffix="%" label="Client Satisfaction" />
           </div>
         </div>
-        <style>{`@media(max-width:640px){.container>div{grid-template-columns:1fr 1fr!important}}`}</style>
       </section>
 
       {/* ── SERVICES ── */}
@@ -175,8 +210,9 @@ export default function Home() {
             title="Services Built for |Digital Growth|"
             subtitle="From concept to launch, we offer end-to-end digital services that transform your vision into a high-performing reality."
           />
-          <div className="home-services-grid">
-            {(services.length ? services : Array(3).fill(null)).map((s, i) => (
+          {/* Show skeleton for 3 slots, or up to 3 real services */}
+          <div className="zt-grid-services">
+            {(services.length ? services.slice(0, 3) : Array(3).fill(null)).map((s, i) => (
               <ServiceCard key={s?._id || i} service={s} index={i} icon={icons[s?.slug]} />
             ))}
           </div>
@@ -201,7 +237,7 @@ export default function Home() {
       <section className="section">
         <div className="container">
           <SectionHeader label="Client Love" title="Words From |Our Partners|" center />
-          <div className="grid-3" style={{ gap: '1.25rem', marginTop: '1rem' }}>
+          <div className="zt-grid-3" style={{ marginTop: '1rem' }}>
             {testimonials.map((t, i) => <TestimonialCard key={t._id} t={t} index={i} />)}
           </div>
         </div>
@@ -212,7 +248,7 @@ export default function Home() {
         <section className="section" style={{ background: 'var(--bg-1)' }}>
           <div className="container">
             <SectionHeader label="Latest Insights" title="From the |Blog|" subtitle="Tips, trends and deep-dives from our team." />
-            <div className="home-blog-grid">
+            <div className="zt-grid-3">
               {blogs.map((b, i) => <BlogCard key={b._id} b={b} index={i} />)}
             </div>
             <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
@@ -238,33 +274,6 @@ export default function Home() {
           </Link>
         </div>
       </section>
-
-      <style>{`
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-        .home-services-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.25rem;
-        }
-        .home-blog-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.5rem;
-          align-items: stretch;
-        }
-
-        @media(max-width: 900px) {
-          .home-services-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .home-blog-grid { grid-template-columns: repeat(2, 1fr) !important; }
-        }
-        @media(max-width: 580px) {
-          .home-services-grid { grid-template-columns: 1fr !important; }
-          .home-blog-grid { grid-template-columns: 1fr !important; }
-          div[style*="repeat(4, 1fr)"] { grid-template-columns: repeat(2, 1fr) !important; }
-          div[style*="repeat(2,1fr)"] { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
     </PageWrapper>
   )
 }
@@ -304,13 +313,20 @@ function ServiceCard({ service, index, icon }) {
 
 function FeaturedProjects() {
   const [projects, setProjects] = useState([])
-  useEffect(() => { api.get('/projects?isFeatured=true&limit=2').then(r => setProjects(r.data.data)).catch(() => {}) }, [])
+  useEffect(() => {
+    api.get('/projects?isFeatured=true&limit=2').then(r => setProjects(r.data.data)).catch(() => {})
+  }, [])
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '1.5rem' }}>
-      {(projects.length ? projects : Array(2).fill(null)).map((p, i) => {
-        return (
-          <motion.div key={p?._id || i} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.15, duration: 0.6 }}>
+    <>
+      <div className="zt-grid-2">
+        {(projects.length ? projects : Array(2).fill(null)).map((p, i) => (
+          <motion.div
+            key={p?._id || i}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.15, duration: 0.6 }}
+          >
             {!p ? (
               <div className="card" style={{ height: 320 }}>
                 <div className="skeleton" style={{ height: '60%', borderRadius: 0 }} />
@@ -322,7 +338,10 @@ function FeaturedProjects() {
             ) : (
               <Link to={`/projects/${p.slug}`} className="card" style={{ display: 'block' }}>
                 <div style={{ position: 'relative', height: 240, overflow: 'hidden' }}>
-                  <img src={p.coverImage} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
+                  <img
+                    src={p.coverImage}
+                    alt={p.title}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
                     onMouseOver={e => e.target.style.transform = 'scale(1.05)'}
                     onMouseOut={e => e.target.style.transform = 'scale(1)'}
                   />
@@ -346,10 +365,9 @@ function FeaturedProjects() {
               </Link>
             )}
           </motion.div>
-        )
-      })}
-      <style>{`@media(max-width:640px){div[style*="grid-template-columns: repeat(2"]{grid-template-columns:1fr!important}}`}</style>
-    </div>
+        ))}
+      </div>
+    </>
   )
 }
 
@@ -389,60 +407,23 @@ function BlogCard({ b, index }) {
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      style={{ height: '100%' }}
     >
-      <Link to={`/blog/${b.slug}`} className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%', textDecoration: 'none', overflow: 'hidden' }}>
-        {/* Image */}
-        <div style={{ position: 'relative', height: 200, overflow: 'hidden', flexShrink: 0 }}>
+      <Link to={`/blog/${b.slug}`} className="card" style={{ display: 'block' }}>
+        <div style={{ height: 180, overflow: 'hidden' }}>
           <img
-            src={b.coverImage} alt={b.title}
+            src={b.coverImage}
+            alt={b.title}
             style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s ease' }}
-            onMouseOver={e => e.target.style.transform = 'scale(1.06)'}
+            onMouseOver={e => e.target.style.transform = 'scale(1.05)'}
             onMouseOut={e => e.target.style.transform = 'scale(1)'}
           />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(8,8,8,0.5) 0%, transparent 60%)' }} />
-          {b.category?.name && (
-            <div style={{ position: 'absolute', bottom: '0.75rem', left: '0.75rem' }}>
-              <span className="tag">{b.category.name}</span>
-            </div>
-          )}
         </div>
-
-        {/* Body */}
-        <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1, gap: '0.6rem' }}>
-          {/* Meta row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.75rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              ⏱ {b.readTime} min read
-            </span>
-            {b.publishedAt && (
-              <span>{new Date(b.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-            )}
+        <div style={{ padding: '1.25rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+            <span className="tag">{b.readTime} min read</span>
           </div>
-
-          {/* Title */}
-          <h4 style={{ color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: '0.97rem', fontWeight: 600, lineHeight: 1.5, margin: 0 }}>
-            {b.title}
-          </h4>
-
-          {/* Excerpt */}
-          <p style={{ fontSize: '0.83rem', lineHeight: 1.75, color: 'var(--text-muted)', margin: 0, flex: 1 }}>
-            {b.excerpt?.slice(0, 110)}...
-          </p>
-
-          {/* Tags */}
-          {b.tags?.length > 0 && (
-            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.25rem' }}>
-              {b.tags.slice(0, 3).map(t => (
-                <span key={t} className="tag" style={{ fontSize: '0.68rem' }}>{t}</span>
-              ))}
-            </div>
-          )}
-
-          {/* Read more */}
-          <div style={{ marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--gold)', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', fontWeight: 500 }}>
-            Read article <FiArrowRight size={13} />
-          </div>
+          <h4 style={{ color: 'var(--text)', marginBottom: '0.5rem', fontFamily: 'var(--font-mono)', fontSize: '0.95rem', lineHeight: 1.5 }}>{b.title}</h4>
+          <p style={{ fontSize: '0.82rem', lineHeight: 1.7 }}>{b.excerpt.slice(0, 100)}...</p>
         </div>
       </Link>
     </motion.div>
