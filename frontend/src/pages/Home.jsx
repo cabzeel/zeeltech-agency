@@ -72,7 +72,7 @@ export default function Home() {
   const heroY = useTransform(scrollY, [0, 500], [0, 80])
 
   useEffect(() => {
-    api.get('/services?status=active').then(r => setServices(r.data.data)).catch(() => {})
+    api.get('/services?status=active&limit=4').then(r => setServices(r.data.data)).catch(() => {})
     api.get('/testimonials?status=approved&isFeatured=true').then(r => setTestimonials(r.data.data)).catch(() => {})
     api.get('/blogs?status=published&limit=3').then(r => setBlogs(r.data.data)).catch(() => {})
   }, [])
@@ -175,7 +175,7 @@ export default function Home() {
             title="Services Built for |Digital Growth|"
             subtitle="From concept to launch, we offer end-to-end digital services that transform your vision into a high-performing reality."
           />
-          <div className="grid-2" style={{ gap: '1.25rem' }}>
+          <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.25rem' }}>
             {(services.length ? services : Array(4).fill(null)).map((s, i) => (
               <ServiceCard key={s?._id || i} service={s} index={i} icon={icons[s?.slug]} />
             ))}
@@ -241,6 +241,14 @@ export default function Home() {
 
       <style>{`
         @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+        @media(max-width:640px){
+          .services-grid { grid-template-columns: 1fr !important; }
+          div[style*="grid-template-columns: repeat(2,1fr)"] { grid-template-columns: 1fr !important; }
+          div[style*="repeat(4, 1fr)"] { grid-template-columns: 1fr 1fr !important; }
+        }
+        @media(max-width:900px){
+          .services-grid { grid-template-columns: 1fr 1fr !important; }
+        }
       `}</style>
     </PageWrapper>
   )
