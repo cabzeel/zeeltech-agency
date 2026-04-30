@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-const BASE = "http://localhost:5000";
+const BASE = import.meta.env.VITE_BACKEND_URL;
 
 async function api(path, token, { method = "GET", body, params } = {}) {
   let url = `${BASE}${path}`;
