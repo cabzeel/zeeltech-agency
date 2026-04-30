@@ -14,11 +14,13 @@ import Pricing from './pages/Pricing'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import ZeeltechAdmin from './pages/ZeeltechAdmin'
+import ScrollToTop from './components/ScrollToTop'
 
 export default function App() {
   const location = useLocation()
   return (
     <>
+      <ScrollToTop />
       <Navbar />
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
