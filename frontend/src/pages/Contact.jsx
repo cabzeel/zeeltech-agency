@@ -53,8 +53,9 @@ export default function Contact() {
   return (
     <PageWrapper>
       <Helmet>
-        <title>Contact Us – Zeeltech Agency</title>
-        <meta name="description" content="Get in touch with Zeeltech Agency. Tell us about your project and we'll respond with a tailored proposal within 24 hours." />
+        <title>Contact ZeelTech | Get a Free Website Audit</title>
+        <meta name="description" content="Contact ZeelTech Web Solutions for a free website audit. We build professional websites for chiropractors and small businesses across the US, UK and Cameroon." />
+        <link rel="canonical" href="https://zeeltech-agency.vercel.app/contact" />
       </Helmet>
 
       {/* Hero */}

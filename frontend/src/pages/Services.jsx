@@ -23,8 +23,9 @@ export default function Services() {
   return (
     <PageWrapper>
       <Helmet>
-        <title>Services – Zeeltech Agency</title>
-        <meta name="description" content="Zeeltech offers web development, mobile apps, UI/UX design, and digital marketing services built for growth." />
+        <title>Web Design Services | ZeelTech – Websites, SEO & Web Apps</title>
+        <meta name="description" content="ZeelTech offers professional web design, SEO, web applications and digital marketing for chiropractors and small businesses. Fast turnaround. Competitive pricing." />
+        <link rel="canonical" href="https://zeeltech-agency.vercel.app/services" />
       </Helmet>
 
       {/* Hero */}
