@@ -7,6 +7,9 @@ import { format } from 'date-fns'
 import PageWrapper from '../components/ui/PageWrapper'
 import api from '../utils/api'
 
+const SITE_URL = 'https://zeeltechsolutions.com'
+const FALLBACK_IMAGE = `${SITE_URL}/og-image.png`
+
 export default function ProjectDetail() {
   const { slug }              = useParams()
   const [project, setProject] = useState(null)
@@ -33,6 +36,10 @@ export default function ProjectDetail() {
 
   if (!project) return (
     <PageWrapper>
+      <Helmet>
+        <title>Project Not Found – ZeelTech Portfolio</title>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <div style={{ textAlign:'center',padding:'8rem 2rem' }}>
         <div style={{ fontSize:'4rem',marginBottom:'1rem' }}>🗂️</div>
         <h2>Project Not Found</h2>
@@ -43,13 +50,57 @@ export default function ProjectDetail() {
   )
 
   const p = project
+  const canonicalUrl = `${SITE_URL}/projects/${p.slug}`
+  const ogImage = p.coverImage || FALLBACK_IMAGE
+  const metaDescription = p.description
+    ? `${p.description} — A ZeelTech case study.`
+    : `See how ZeelTech built ${p.title} — a case study in professional web design and development.`
+
+  const projectSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: p.title,
+    description: p.description,
+    url: canonicalUrl,
+    image: ogImage,
+    creator: {
+      '@type': 'ProfessionalService',
+      name: 'ZeelTech Web Solutions',
+      url: SITE_URL,
+    },
+    ...(p.timeline?.startDate && { dateCreated: p.timeline.startDate }),
+    ...(p.timeline?.endDate && { datePublished: p.timeline.endDate }),
+    ...(p.clientName && { contributor: { '@type': 'Organization', name: p.clientName } }),
+  }
 
   return (
     <PageWrapper>
       <Helmet>
-        <title>{p.title} – Zeeltech Portfolio</title>
-        <meta name="description" content={p.description} />
-        <meta property="og:image" content={p.coverImage} />
+        {/* Core */}
+        <title>{p.title} | ZeelTech Portfolio</title>
+        <meta name="description" content={metaDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${p.title} | ZeelTech Portfolio`} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="ZeelTech Web Solutions" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${p.title} | ZeelTech`} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content={ogImage} />
+
+        {/* JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify(projectSchema)}
+        </script>
       </Helmet>
 
       {/* Hero */}
@@ -106,14 +157,12 @@ export default function ProjectDetail() {
         )}
 
         <div style={{ display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1.5rem',marginBottom:'3rem' }}>
-          {/* Problem */}
           <div className="glass" style={{ padding:'2rem' }}>
             <h4 style={{ color:'var(--text)',marginBottom:'1rem',fontFamily:'var(--font-mono)',display:'flex',alignItems:'center',gap:'0.5rem' }}>
               <span style={{ color:'var(--gold)' }}>01</span> The Challenge
             </h4>
             <p style={{ fontSize:'0.92rem',lineHeight:1.8 }}>{p.problem}</p>
           </div>
-          {/* Solution */}
           <div className="glass-gold" style={{ padding:'2rem' }}>
             <h4 style={{ color:'var(--gold)',marginBottom:'1rem',fontFamily:'var(--font-mono)',display:'flex',alignItems:'center',gap:'0.5rem' }}>
               <span>02</span> Our Solution
@@ -140,7 +189,7 @@ export default function ProjectDetail() {
         <div style={{ textAlign:'center',padding:'3rem',background:'var(--bg-2)',borderRadius:'var(--radius-lg)',border:'1px solid var(--border)' }}>
           <h3 style={{ fontFamily:'var(--font-mono)',marginBottom:'0.75rem' }}>Want Similar Results?</h3>
           <p style={{ marginBottom:'2rem',maxWidth:400,margin:'0 auto 2rem' }}>Let's discuss how we can build something this impactful for your business.</p>
-          <a href={p.url} target='_blank' className="btn btn-gold">{p.cta || 'Start a Project'} <FiArrowRight/></a>
+          <a href={p.url} target='_blank' rel="noopener noreferrer" className="btn btn-gold">{p.cta || 'Start a Project'} <FiArrowRight/></a>
         </div>
       </div>
 

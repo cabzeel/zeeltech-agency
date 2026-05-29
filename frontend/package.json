@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/prerender-routes.mjs && PRERENDER=1 vite build",
+    "build:no-prerender": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {

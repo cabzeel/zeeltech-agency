@@ -8,6 +8,9 @@ import toast from 'react-hot-toast'
 import PageWrapper from '../components/ui/PageWrapper'
 import api from '../utils/api'
 
+const SITE_URL = 'https://zeeltechsolutions.com'
+const FALLBACK_IMAGE = `${SITE_URL}/og-image.png`
+
 export default function BlogPost() {
   const { slug }          = useParams()
   const [post, setPost]   = useState(null)
@@ -21,7 +24,6 @@ export default function BlogPost() {
     api.get(`/blogs/slug/${slug}`)
       .then(r => {
         setPost(r.data.data)
-        // Fetch related
         if (r.data.data.category?._id) {
           api.get(`/blogs?status=published&category=${r.data.data.category._id}&limit=3`)
             .then(r2 => setRelated(r2.data.data.filter(p => p.slug !== slug)))
@@ -61,6 +63,10 @@ export default function BlogPost() {
 
   if (!post) return (
     <PageWrapper>
+      <Helmet>
+        <title>Article Not Found – Zeeltech Blog</title>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <div style={{ textAlign:'center',padding:'8rem 2rem' }}>
         <div style={{ fontSize:'4rem',marginBottom:'1rem' }}>📭</div>
         <h2>Article Not Found</h2>
@@ -70,15 +76,73 @@ export default function BlogPost() {
     </PageWrapper>
   )
 
+  const canonicalUrl = `${SITE_URL}/blog/${post.slug}`
+  const ogImage = post.coverImage || FALLBACK_IMAGE
+
+  // BlogPosting structured data for Google rich results
+  const blogPostingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    image: ogImage,
+    url: canonicalUrl,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt || post.publishedAt,
+    author: {
+      '@type': 'Person',
+      name: post.author?.username || 'ZeelTech Team',
+      url: `${SITE_URL}/about`,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'ZeelTech Web Solutions',
+      url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${SITE_URL}/favicon.png`,
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
+  }
+
   return (
     <PageWrapper>
       <Helmet>
+        {/* Core */}
         <title>{post.title} – Zeeltech Blog</title>
         <meta name="description" content={post.excerpt} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="article" />
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={post.excerpt} />
-        <meta property="og:image" content={post.coverImage} />
-        <meta property="og:type" content="article" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="ZeelTech Web Solutions" />
+        {post.publishedAt && (
+          <meta property="article:published_time" content={post.publishedAt} />
+        )}
+        {post.updatedAt && (
+          <meta property="article:modified_time" content={post.updatedAt} />
+        )}
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.excerpt} />
+        <meta name="twitter:image" content={ogImage} />
+
+        {/* JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify(blogPostingSchema)}
+        </script>
       </Helmet>
 
       {/* Hero image */}

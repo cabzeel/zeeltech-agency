@@ -28,3 +28,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </HelmetProvider>
   </React.StrictMode>
 )
+
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('load', () => {
+    // Small delay to allow data-fetching components to settle.
+    // Increase to 2000 if your pages do slow API calls on mount.
+    setTimeout(() => {
+      document.dispatchEvent(new Event('render-event'))
+    }, 500)
+  })
+}

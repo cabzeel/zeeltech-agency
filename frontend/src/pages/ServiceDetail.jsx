@@ -6,6 +6,9 @@ import { FiArrowLeft, FiArrowRight, FiCheck } from 'react-icons/fi'
 import PageWrapper from '../components/ui/PageWrapper'
 import api from '../utils/api'
 
+const SITE_URL = 'https://zeeltechsolutions.com'
+const FALLBACK_IMAGE = `${SITE_URL}/og-image.png`
+
 export default function ServiceDetail() {
   const { slug }              = useParams()
   const [service, setService] = useState(null)
@@ -31,6 +34,10 @@ export default function ServiceDetail() {
 
   if (!service) return (
     <PageWrapper>
+      <Helmet>
+        <title>Service Not Found – ZeelTech Web Solutions</title>
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <div style={{ textAlign:'center',padding:'8rem 2rem' }}>
         <div style={{ fontSize:'4rem',marginBottom:'1rem' }}>🔧</div>
         <h2>Service Not Found</h2>
@@ -41,12 +48,56 @@ export default function ServiceDetail() {
   )
 
   const s = service
+  const canonicalUrl = `${SITE_URL}/services/${s.slug}`
+  const ogImage = s.imgUrl || FALLBACK_IMAGE
+  const metaDescription = s.subDescription
+    ? `${s.subDescription} — Professional web services by ZeelTech Web Solutions.`
+    : `ZeelTech offers ${s.title} for chiropractors and small businesses. Fast delivery, mobile-first, built to convert.`
+
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: s.title,
+    description: s.fullDescription || s.subDescription,
+    url: canonicalUrl,
+    image: ogImage,
+    provider: {
+      '@type': 'ProfessionalService',
+      name: 'ZeelTech Web Solutions',
+      url: SITE_URL,
+    },
+    areaServed: ['US', 'GB', 'CA', 'CM'],
+    serviceType: s.title,
+  }
 
   return (
     <PageWrapper>
       <Helmet>
-        <title>{s.title} – Zeeltech Agency</title>
-        <meta name="description" content={s.subDescription} />
+        {/* Core */}
+        <title>{s.title} | ZeelTech Web Solutions</title>
+        <meta name="description" content={metaDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={`${s.title} | ZeelTech Web Solutions`} />
+        <meta property="og:description" content={metaDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:site_name" content="ZeelTech Web Solutions" />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${s.title} | ZeelTech`} />
+        <meta name="twitter:description" content={metaDescription} />
+        <meta name="twitter:image" content={ogImage} />
+
+        {/* JSON-LD */}
+        <script type="application/ld+json">
+          {JSON.stringify(serviceSchema)}
+        </script>
       </Helmet>
 
       {/* Hero */}
@@ -100,11 +151,9 @@ export default function ServiceDetail() {
               {s.process.map((step, i) => (
                 <motion.div key={i} initial={{ opacity:0,x:-30 }} animate={{ opacity:1,x:0 }} transition={{ delay:i*0.1,duration:0.5 }}
                   style={{ display:'grid',gridTemplateColumns:'80px 1fr',gap:'1.5rem',paddingBottom:'2.5rem',position:'relative' }}>
-                  {/* Timeline line */}
                   {i < s.process.length - 1 && (
                     <div style={{ position:'absolute',left:39,top:56,bottom:0,width:2,background:'linear-gradient(to bottom, var(--gold), transparent)' }}/>
                   )}
-                  {/* Step number */}
                   <div style={{ width:56,height:56,borderRadius:'50%',background:'var(--gold-muted)',border:'2px solid var(--border-gold)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'var(--font-mono)',fontWeight:700,color:'var(--gold)',fontSize:'1.1rem',flexShrink:0 }}>
                     {String(i+1).padStart(2,'0')}
                   </div>
