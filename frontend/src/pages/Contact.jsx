@@ -86,8 +86,8 @@ export default function Contact() {
                 <h3 style={{ fontFamily:'var(--font-mono)',marginBottom:'1.75rem',color:'var(--text)' }}>Contact Information</h3>
                 <div style={{ display:'flex',flexDirection:'column',gap:'1.25rem' }}>
                   {[
-                    { icon:<FiMail/>, label:'Email', value:'hello@zeeltech.com', href:'mailto:hello@zeeltech.com' },
-                    { icon:<FiPhone/>, label:'Phone', value:'+237 6XX XXX XXX', href:'tel:+2376XXXXXXX' },
+                    { icon:<FiMail/>, label:'Email', value:'hello@zeeltech.com', href:'mailto:cabzeel@zeeltechsolutions.com' },
+                    { icon:<FiPhone/>, label:'Phone', value:'+237 653344368', href:'tel:+237653344368' },
                     { icon:<FiMapPin/>, label:'Location', value:'Bamenda, North West, Cameroon 🇨🇲' },
                   ].map(item => (
                     <div key={item.label} style={{ display:'flex',gap:'1rem',alignItems:'flex-start' }}>
