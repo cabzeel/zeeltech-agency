@@ -20,7 +20,7 @@
     "react-icons": "^5.0.1",
     "react-intersection-observer": "^9.7.0",
     "react-router-dom": "^6.22.0",
-    "vite-plugin-prerender": "^1.0.8"
+    "vite-prerender-plugin": "^0.5.13"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",

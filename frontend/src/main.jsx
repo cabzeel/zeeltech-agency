@@ -6,36 +6,62 @@ import { Toaster } from 'react-hot-toast'
 import App from './App'
 import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <HelmetProvider>
-      <BrowserRouter>
-        <App />
-        <Toaster
-          position="top-right"
-          toastOptions={{
-            style: {
-              background: '#1a1a1a',
-              color: '#f0f0f0',
-              border: '1px solid rgba(240,180,41,0.3)',
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: '0.875rem',
-            },
-            success: { iconTheme: { primary: '#F0B429', secondary: '#080808' } },
-          }}
-        />
-      </BrowserRouter>
-    </HelmetProvider>
-  </React.StrictMode>
-)
-
-
 if (typeof window !== 'undefined') {
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+      <HelmetProvider>
+        <BrowserRouter>
+          <App />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              style: {
+                background: '#1a1a1a',
+                color: '#f0f0f0',
+                border: '1px solid rgba(240,180,41,0.3)',
+                fontFamily: "'Space Grotesk', sans-serif",
+                fontSize: '0.875rem',
+              },
+              success: { iconTheme: { primary: '#F0B429', secondary: '#080808' } },
+            }}
+          />
+        </BrowserRouter>
+      </HelmetProvider>
+    </React.StrictMode>
+  )
+
   window.addEventListener('load', () => {
-    // Small delay to allow data-fetching components to settle.
-    // Increase to 2000 if your pages do slow API calls on mount.
     setTimeout(() => {
       document.dispatchEvent(new Event('render-event'))
     }, 500)
   })
+}
+
+
+export async function prerender(data) {
+  const { default: ReactDOMServer } = await import('react-dom/server')
+  const { StaticRouter } = await import('react-router-dom/server')
+  const { HelmetProvider } = await import('react-helmet-async')
+
+  const helmetContext = {}
+
+  const html = ReactDOMServer.renderToString(
+    <React.StrictMode>
+      <HelmetProvider context={helmetContext}>
+        <StaticRouter location={data.url}>
+          <App />
+        </StaticRouter>
+      </HelmetProvider>
+    </React.StrictMode>
+  )
+
+  const { helmet } = helmetContext
+
+  return {
+    html,
+    head: helmet
+      ? `${helmet.title.toString()}${helmet.meta.toString()}${helmet.link.toString()}`
+      : '',
+    links: new Set(),
+  }
 }
