@@ -22,9 +22,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 // Use the production backend URL. In CI set VITE_BACKEND_URL in your
 // Vercel environment variables; locally it falls back to localhost.
-const BASE_URL =
-  process.env.VITE_BACKEND_URL?.replace(/\/$/, '') ||
-  'https://zeeltech.vercel.app'
+const BASE_URL =  'https://zeeltech.vercel.app/api/v1'
 
 const API = BASE_URL;
 
