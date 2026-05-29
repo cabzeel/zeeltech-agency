@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://zeeltech-agency.vercel.app/sitemap.xml
+Sitemap: https://zeeltechsolutions.com/sitemap.xml

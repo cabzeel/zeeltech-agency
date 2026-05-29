@@ -182,7 +182,7 @@ export default function Home() {
           name="description"
           content="ZeelTech builds fast, professional websites for chiropractors, law firms and small businesses in the US, UK, Canada and Cameroon. Mobile-first, SEO-ready, built to convert."
         />
-        <link rel="canonical" href="https://zeeltech-agency.vercel.app/" />
+        <link rel="canonical" href="https://zeeltechsolutions.com/" />
       </Helmet>
       <style>{GRID_STYLES}</style>
 

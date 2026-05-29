@@ -45,7 +45,7 @@ export default function About() {
           name="description"
           content="ZeelTech Web Solutions is a professional web agency based in Cameroon, building websites for chiropractors and small businesses across the US, UK, Canada and Australia."
         />
-        <link rel="canonical" href="https://zeeltech-agency.vercel.app/about" />
+        <link rel="canonical" href="https://zeeltechsolutions.com/about" />
       </Helmet>
       {/* Hero */}
       <section

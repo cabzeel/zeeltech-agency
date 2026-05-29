@@ -55,7 +55,7 @@ export default function Contact() {
       <Helmet>
         <title>Contact ZeelTech | Get a Free Website Audit</title>
         <meta name="description" content="Contact ZeelTech Web Solutions for a free website audit. We build professional websites for chiropractors and small businesses across the US, UK and Cameroon." />
-        <link rel="canonical" href="https://zeeltech-agency.vercel.app/contact" />
+        <link rel="canonical" href="https://zeeltechsolutions.com/contact" />
       </Helmet>
 
       {/* Hero */}

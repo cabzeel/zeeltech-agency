@@ -291,7 +291,7 @@ export default function Pricing() {
       <Helmet>
         <title>Pricing | ZeelTech Web Solutions – Professional Websites from $300</title>
         <meta name="description" content="Transparent pricing for professional websites. Starter from $300 / 150,000 XAF. No hidden fees. ZeelTech serves the US, UK, Canada, Australia and Cameroon." />
-        <link rel="canonical" href="https://zeeltech-agency.vercel.app/pricing" />
+        <link rel="canonical" href="https://zeeltechsolutions.com/pricing" />
       </Helmet>
 
       {/* Hero */}
