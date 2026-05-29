@@ -42,7 +42,6 @@
         }
       ]
     }
-  ],
-  "buildCommand": "cd frontend && PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1 npm install && npm run build",
-  "installCommand": "cd frontend && npm install"
+  ]
+
 }
