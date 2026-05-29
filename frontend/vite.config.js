@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { readFileSync } from 'fs'
+import { fileURLToPath } from 'url'
+import { resolve, dirname } from 'path'
 
-// Static routes that are always prerendered
-// Dynamic routes (/blog/:slug, /services/:slug, /projects/:slug)
-// are added at build time by scripts/prerender-routes.mjs
-// which fetches all published slugs from the live API.
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
 const STATIC_ROUTES = [
   '/',
   '/about',
@@ -15,17 +16,25 @@ const STATIC_ROUTES = [
   '/blog',
 ]
 
-// vite-plugin-prerender is loaded conditionally so `vite dev` is unaffected.
-// The PRERENDER env var is set to "1" only in the production build command.
 async function getPrerenderPlugin() {
   if (process.env.PRERENDER !== '1') return null
-  const { default: prerender } = await import('vite-plugin-prerender')
 
-  // Pull dynamic routes written by scripts/prerender-routes.mjs
+  // createRequire is called INSIDE this function, AFTER the PRERENDER guard.
+  // This means it only runs during production builds — never during vite dev.
+  // That's what prevents the "require is not defined in ES module scope" crash.
+  const { createRequire } = await import('module')
+  const _require = createRequire(import.meta.url)
+  const prerender = _require('vite-plugin-prerender')
+
+  const PrerenderPlugin = prerender.default ?? prerender
+  const PuppeteerRenderer = prerender.PuppeteerRenderer
+
   let dynamicRoutes = []
   try {
-    const fs = await import('fs')
-    const raw = fs.readFileSync('scripts/dynamic-routes.json', 'utf-8')
+    const raw = readFileSync(
+      resolve(__dirname, 'scripts/dynamic-routes.json'),
+      'utf-8'
+    )
     dynamicRoutes = JSON.parse(raw)
   } catch {
     console.warn('[prerender] No dynamic-routes.json found — skipping dynamic routes.')
@@ -34,11 +43,10 @@ async function getPrerenderPlugin() {
   const routes = [...STATIC_ROUTES, ...dynamicRoutes]
   console.log(`[prerender] Rendering ${routes.length} routes:`, routes)
 
-  return prerender({
-    staticDir: 'dist',
+  return PrerenderPlugin({
+    staticDir: resolve(__dirname, 'dist'),
     routes,
-    renderer: new prerender.PuppeteerRenderer({
-      // Wait until the React tree has settled before snapshotting HTML
+    renderer: new PuppeteerRenderer({
       renderAfterDocumentEvent: 'render-event',
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -60,8 +68,23 @@ export default defineConfig(async () => {
       },
     },
     build: {
-      // Inline assets under 4 KB so prerendered HTML is more self-contained
       assetsInlineLimit: 4096,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            // React core — changes rarely, cached by browser long-term
+            'vendor-react': ['react', 'react-dom'],
+            // Routing — separate so route changes don't bust the react cache
+            'vendor-router': ['react-router-dom'],
+            // Framer Motion is huge (~150KB) — isolate it
+            'vendor-motion': ['framer-motion'],
+            // Icon library is large — only loaded once and cached
+            'vendor-icons': ['react-icons'],
+            // Remaining smaller utils bundled together
+            'vendor-misc': ['axios', 'date-fns', 'react-helmet-async', 'react-hot-toast', 'react-intersection-observer'],
+          },
+        },
+      },
     },
   }
 })
