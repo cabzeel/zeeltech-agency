@@ -26,7 +26,7 @@ const BASE_URL =
   process.env.VITE_BACKEND_URL?.replace(/\/$/, '') ||
   'https://zeeltech.vercel.app'
 
-const API = `${BASE_URL}/api/v1`
+const API = BASE_URL;
 
 async function fetchSlugs(endpoint) {
   try {
