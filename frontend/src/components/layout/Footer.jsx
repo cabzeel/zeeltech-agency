@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FiLinkedin, FiInstagram, FiTwitter, FiGithub, FiMail } from 'react-icons/fi'
+import { FiLinkedin, FiInstagram, FiTwitter, FiGithub, FiMail, FiFacebook } from 'react-icons/fi'
 
 const footerLinks = {
   Company:  [{ to: '/about', label: 'About Us' }, { to: '/projects', label: 'Our Work' }, { to: '/pricing', label: 'Pricing' }],
@@ -23,11 +23,11 @@ export default function Footer() {
             </p>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               {[
-                { icon: <FiLinkedin />, href: '#' },
-                { icon: <FiInstagram />, href: '#' },
-                { icon: <FiTwitter />, href: '#' },
-                { icon: <FiGithub />, href: '#' },
-                { icon: <FiMail />, href: 'mailto:hello@zeeltech.com' },
+                { icon: <FiLinkedin />, href: 'www.linkedin.com/in/timchia-cabzeel-29a101261' },
+                { icon: <FiInstagram />, href: 'https://www.instagram.com/zeeltechsol_237/' },
+                { icon: <FiFacebook />, href: 'https://web.facebook.com/profile.php?id=61585788879290' },
+                { icon: <FiGithub />, href: 'https://github.com/cabzeel' },
+                { icon: <FiMail />, href: 'mailto:cabzeel@zeeltechsolutions.com' },
               ].map((s, i) => (
                 <a key={i} href={s.href} style={{
                   width:36,height:36,borderRadius:8,background:'var(--surface)',border:'1px solid var(--border)',
