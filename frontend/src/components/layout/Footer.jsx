@@ -23,7 +23,7 @@ export default function Footer() {
             </p>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               {[
-                { icon: <FiLinkedin />, href: 'www.linkedin.com/in/timchia-cabzeel-29a101261' },
+                { icon: <FiLinkedin />, href: 'https://www.linkedin.com/in/timchia-cabzeel-29a101261' },
                 { icon: <FiInstagram />, href: 'https://www.instagram.com/zeeltechsol_237/' },
                 { icon: <FiFacebook />, href: 'https://web.facebook.com/profile.php?id=61585788879290' },
                 { icon: <FiGithub />, href: 'https://github.com/cabzeel' },

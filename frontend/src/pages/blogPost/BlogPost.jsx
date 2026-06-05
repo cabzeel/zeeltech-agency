@@ -5,8 +5,8 @@ import { Helmet } from 'react-helmet-async'
 import { FiClock, FiEye, FiArrowLeft, FiSend } from 'react-icons/fi'
 import { format } from 'date-fns'
 import toast from 'react-hot-toast'
-import PageWrapper from '../components/ui/PageWrapper'
-import api from '../utils/api'
+import PageWrapper from '../../components/ui/PageWrapper'
+import api from '../../utils/api'
 
 const SITE_URL = 'https://zeeltechsolutions.com'
 const FALLBACK_IMAGE = `${SITE_URL}/og-image.png`

@@ -25,8 +25,8 @@
   --radius-lg:   20px;
   --radius-xl:   32px;
 
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'Inter', system-ui, sans-serif;
+  --font-display: 'Quicksand', sans-serif;
+  --font-body:    'Nunito Sans Variable', system-ui, sans-serif;
   --font-mono:    'Space Grotesk', monospace;
 
   --shadow-gold: 0 0 40px rgba(240,180,41,0.15);
@@ -287,4 +287,102 @@ label {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none;
   opacity: 0.3;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SHARED / GLOBAL ADDITIONS
+   Append these to your existing index.css
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── PAGE HERO (used by About, Blog, and any future interior pages) ── */
+.page-hero {
+  padding: 5rem 0 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-hero__orb {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(240, 180, 41, 0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.page-hero__inner {
+  position: relative;
+  text-align: center;
+}
+
+/* h1 width cap — default (About uses 700px) */
+.page-hero__h1 {
+  max-width: 700px;
+  margin: 0 auto 1.5rem;
+}
+
+/* Narrow variant (Blog uses 600px) */
+.page-hero__h1--narrow {
+  max-width: 600px;
+}
+
+/* Subtext — default (About uses 580px) */
+.page-hero__sub {
+  max-width: 580px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+}
+
+/* Narrow variant (Blog uses 480px, plus bottom margin for search) */
+.page-hero__sub--narrow {
+  max-width: 480px;
+  margin-bottom: 2.5rem;
+  font-size: 1.05rem;
+}
+
+/* ─── SECTION LABEL CENTERED ─────────────────────────────────────────── */
+/* Used wherever a section-label needs to be centred in a hero or heading */
+.section-label--center {
+  justify-content: center;
+}
+
+/* ─── SECTION ALT BACKGROUND ─────────────────────────────────────────── */
+/* Replaces style={{ background: "var(--bg-1)" }} on <section> */
+.section--alt {
+  background: var(--bg-1);
+}
+
+/* ─── STAT GRID (About story stats, reusable for any metric block) ───── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.stat-card {
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.stat-card__num {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.stat-card__label {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ─── SOCIAL LINK (icon anchor, used in TeamCard and anywhere else) ──── */
+.social-link {
+  color: var(--text-muted);
+  font-size: 1rem;
+  transition: color var(--transition);
+}
+
+.social-link:hover {
+  color: var(--gold);
 }

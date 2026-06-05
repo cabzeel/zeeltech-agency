@@ -3,8 +3,8 @@ import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { FiMail, FiPhone, FiMapPin, FiSend, FiTwitter, FiLinkedin, FiInstagram } from 'react-icons/fi'
 import toast from 'react-hot-toast'
-import PageWrapper from '../components/ui/PageWrapper'
-import api from '../utils/api'
+import PageWrapper from '../../components/ui/PageWrapper'
+import api from '../../utils/api'
 
 const services = ['Web Development','Mobile App','UI/UX Design','Digital Marketing','Other']
 

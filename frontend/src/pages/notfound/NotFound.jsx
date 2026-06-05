@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { FiArrowRight, FiHome } from 'react-icons/fi'
-import PageWrapper from '../components/ui/PageWrapper'
+import PageWrapper from '../../components/ui/PageWrapper'
 
 export default function NotFound() {
   return (

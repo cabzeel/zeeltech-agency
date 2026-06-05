@@ -4,9 +4,9 @@ import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Helmet } from 'react-helmet-async'
 import { FiArrowRight, FiExternalLink } from 'react-icons/fi'
-import PageWrapper from '../components/ui/PageWrapper'
-import SectionHeader from '../components/ui/SectionHeader'
-import api from '../utils/api'
+import PageWrapper from '../../components/ui/PageWrapper'
+import SectionHeader from '../../components/ui/SectionHeader'
+import api from '../../utils/api'
 
 const statusColors = {
   completed: { bg:'rgba(34,197,94,0.1)', color:'#22c55e', border:'rgba(34,197,94,0.3)' },

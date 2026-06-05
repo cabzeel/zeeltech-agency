@@ -5,12 +5,16 @@ import { HelmetProvider } from 'react-helmet-async'
 import { Toaster } from 'react-hot-toast'
 import App from './App'
 import './index.css'
+import "@fontsource/quicksand/500.css"; // Medium
+import "@fontsource/quicksand/700.css"; // Bold
+
+import "@fontsource-variable/nunito-sans/wght.css";
 
 if (typeof window !== 'undefined') {
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
       <HelmetProvider>
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <App />
           <Toaster
             position="top-right"

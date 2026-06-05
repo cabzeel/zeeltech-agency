@@ -4,9 +4,9 @@ import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Helmet } from 'react-helmet-async'
 import { FiArrowRight, FiCode, FiSmartphone, FiLayout, FiTrendingUp, FiCheck } from 'react-icons/fi'
-import PageWrapper from '../components/ui/PageWrapper'
-import SectionHeader from '../components/ui/SectionHeader'
-import api from '../utils/api'
+import PageWrapper from '../../components/ui/PageWrapper'
+import SectionHeader from '../../components/ui/SectionHeader'
+import api from '../../utils/api'
 
 const iconMap = { 'web-development': <FiCode />, 'mobile-app-development': <FiSmartphone />, 'ui-ux-design': <FiLayout />, 'digital-marketing': <FiTrendingUp /> }
 

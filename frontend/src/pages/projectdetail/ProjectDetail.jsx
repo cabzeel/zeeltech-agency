@@ -4,8 +4,8 @@ import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
 import { FiArrowLeft, FiArrowRight, FiCalendar, FiUser } from 'react-icons/fi'
 import { format } from 'date-fns'
-import PageWrapper from '../components/ui/PageWrapper'
-import api from '../utils/api'
+import PageWrapper from '../../components/ui/PageWrapper'
+import api from '../../utils/api'
 
 const SITE_URL = 'https://zeeltechsolutions.com'
 const FALLBACK_IMAGE = `${SITE_URL}/og-image.png`

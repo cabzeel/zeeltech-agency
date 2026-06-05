@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { Helmet } from "react-helmet-async";
 import { FiCheck, FiArrowRight, FiZap, FiGlobe } from "react-icons/fi";
-import PageWrapper from "../components/ui/PageWrapper";
-import SectionHeader from "../components/ui/SectionHeader";
+import PageWrapper from "../../components/ui/PageWrapper";
+import SectionHeader from "../../components/ui/SectionHeader";
 
 const TIERS = {
   usd: [
