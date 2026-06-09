@@ -124,3 +124,189 @@
   color: var(--text);
   line-height: 1.5;
 }
+
+/* ─── TWO-COLUMN LAYOUT ──────────────────────────────────────────── */
+.bp-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 3rem;
+  align-items: start;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+
+.bp-main {
+  min-width: 0; /* prevent prose overflow in grid */
+}
+
+/* ─── SIDEBAR ────────────────────────────────────────────────────── */
+.bp-sidebar {
+  position: sticky;
+  top: 88px; /* clear the sticky nav */
+  max-height: calc(100vh - 108px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.bp-sidebar::-webkit-scrollbar {
+  width: 3px;
+}
+.bp-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.bp-sidebar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+/* Desktop header — always visible */
+.bp-sidebar__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding: 0 0 1rem 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1rem;
+}
+
+/* Mobile toggle button — hidden on desktop */
+.bp-sidebar__toggle {
+  display: none;
+}
+
+/* Category label */
+.bp-sidebar__group {
+  margin-bottom: 1.5rem;
+}
+
+.bp-sidebar__cat {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Individual post link */
+.bp-sidebar__item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 2px;
+  border-radius: 4px;
+  border-left: 2px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.bp-sidebar__item:hover {
+  background: var(--bg-1);
+  border-left-color: var(--gold);
+}
+
+.bp-sidebar__item-title {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  transition: color 0.15s;
+}
+
+.bp-sidebar__item:hover .bp-sidebar__item-title {
+  color: var(--text);
+}
+
+.bp-sidebar__item-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  /* Collapse to single column — sidebar moves below article */
+  .bp-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .bp-sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0;
+    order: 2; /* renders after the article */
+  }
+
+  /* Hide desktop header on mobile — toggle takes its place */
+  .bp-sidebar__header {
+    display: none;
+  }
+
+  /* Show mobile toggle */
+  .bp-sidebar__toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: left;
+  }
+
+  .bp-sidebar__toggle:hover {
+    color: var(--text);
+  }
+
+  /* Chevron rotates when open */
+  .bp-sidebar__chevron {
+    margin-left: auto;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .bp-sidebar__chevron--open {
+    transform: rotate(90deg);
+  }
+
+  /* Body hidden by default on mobile, shown when toggled */
+  .bp-sidebar__body {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .bp-sidebar__body--open {
+    display: block;
+  }
+}
+
+@media (min-width: 1025px) {
+  /* On desktop, body is always visible — no toggle needed */
+  .bp-sidebar__body {
+    display: block !important;
+  }
+}

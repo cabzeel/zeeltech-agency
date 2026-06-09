@@ -2,16 +2,87 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
-import { FiClock, FiEye, FiArrowLeft, FiSend } from "react-icons/fi";
+import { FiClock, FiEye, FiArrowLeft, FiSend, FiBookOpen, FiChevronRight } from "react-icons/fi";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
 import PageWrapper from "../../components/ui/PageWrapper";
 import api from "../../utils/api";
 import "./BlogPost.css";
 
-const SITE_URL      = "https://zeeltechsolutions.com";
+const SITE_URL       = "https://zeeltechsolutions.com";
 const FALLBACK_IMAGE = `${SITE_URL}/og-image.png`;
 
+/* ── Sidebar ──────────────────────────────────────────────────────── */
+function PostSidebar({ currentSlug }) {
+  const [allPosts, setAllPosts] = useState([]);
+  const [open, setOpen]         = useState(false); // mobile accordion
+
+  useEffect(() => {
+    api
+      .get("/blogs?status=published&limit=20")
+      .then((r) => setAllPosts(r.data.data ?? []))
+      .catch(() => {});
+  }, []);
+
+  const others = allPosts.filter((p) => p.slug !== currentSlug);
+
+  // Group by category name
+  const grouped = others.reduce((acc, p) => {
+    const cat = p.category?.name ?? "Articles";
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(p);
+    return acc;
+  }, {});
+
+  if (others.length === 0) return null;
+
+  return (
+    <aside className="bp-sidebar">
+      {/* Mobile toggle */}
+      <button
+        className="bp-sidebar__toggle"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+      >
+        <FiBookOpen size={14} />
+        More Articles
+        <FiChevronRight
+          size={14}
+          className={`bp-sidebar__chevron${open ? " bp-sidebar__chevron--open" : ""}`}
+        />
+      </button>
+
+      {/* Sidebar body — always visible on desktop, toggled on mobile */}
+      <div className={`bp-sidebar__body${open ? " bp-sidebar__body--open" : ""}`}>
+        <div className="bp-sidebar__header">
+          <FiBookOpen size={13} />
+          More Articles
+        </div>
+
+        {Object.entries(grouped).map(([cat, posts]) => (
+          <div key={cat} className="bp-sidebar__group">
+            <div className="bp-sidebar__cat">{cat}</div>
+            {posts.map((p) => (
+              <Link
+                key={p._id}
+                to={`/blog/${p.slug}`}
+                className="bp-sidebar__item"
+              >
+                <span className="bp-sidebar__item-title">{p.title}</span>
+                <span className="bp-sidebar__item-meta">
+                  <FiClock size={10} />
+                  {p.readTime} min
+                </span>
+              </Link>
+            ))}
+          </div>
+        ))}
+      </div>
+    </aside>
+  );
+}
+
+/* ── Main component ───────────────────────────────────────────────── */
 export default function BlogPost() {
   const { slug }                    = useParams();
   const [post, setPost]             = useState(null);
@@ -26,7 +97,8 @@ export default function BlogPost() {
       .then((r) => {
         setPost(r.data.data);
         if (r.data.data.category?._id) {
-          api.get(`/blogs?status=published&category=${r.data.data.category._id}&limit=3`)
+          api
+            .get(`/blogs?status=published&category=${r.data.data.category._id}&limit=3`)
             .then((r2) => setRelated(r2.data.data.filter((p) => p.slug !== slug)))
             .catch(() => {});
         }
@@ -38,7 +110,8 @@ export default function BlogPost() {
   const submitComment = async (e) => {
     e.preventDefault();
     if (!comment.guestName || !comment.guestEmail || !comment.content) {
-      toast.error("Please fill in all fields"); return;
+      toast.error("Please fill in all fields");
+      return;
     }
     setSubmitting(true);
     try {
@@ -51,7 +124,7 @@ export default function BlogPost() {
     setSubmitting(false);
   };
 
-  /* ── Loading state ─────────────────────────────────────────────── */
+  /* ── Loading ──────────────────────────────────────────────────── */
   if (loading) return (
     <PageWrapper>
       <div className="container bp-skeleton-wrap">
@@ -63,7 +136,7 @@ export default function BlogPost() {
     </PageWrapper>
   );
 
-  /* ── Not found ─────────────────────────────────────────────────── */
+  /* ── Not found ────────────────────────────────────────────────── */
   if (!post) return (
     <PageWrapper>
       <Helmet>
@@ -113,14 +186,14 @@ export default function BlogPost() {
         <title>{post.title} – Zeeltech Blog</title>
         <meta name="description" content={post.excerpt} />
         <link rel="canonical" href={canonicalUrl} />
-        <meta property="og:type"        content="article" />
-        <meta property="og:title"       content={post.title} />
-        <meta property="og:description" content={post.excerpt} />
-        <meta property="og:url"         content={canonicalUrl} />
-        <meta property="og:image"       content={ogImage} />
+        <meta property="og:type"         content="article" />
+        <meta property="og:title"        content={post.title} />
+        <meta property="og:description"  content={post.excerpt} />
+        <meta property="og:url"          content={canonicalUrl} />
+        <meta property="og:image"        content={ogImage} />
         <meta property="og:image:width"  content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:site_name"   content="ZeelTech Web Solutions" />
+        <meta property="og:site_name"    content="ZeelTech Web Solutions" />
         {post.publishedAt && <meta property="article:published_time" content={post.publishedAt} />}
         {post.updatedAt   && <meta property="article:modified_time"  content={post.updatedAt} />}
         <meta name="twitter:card"        content="summary_large_image" />
@@ -130,12 +203,16 @@ export default function BlogPost() {
         <script type="application/ld+json">{JSON.stringify(blogPostingSchema)}</script>
       </Helmet>
 
-      {/* ── Hero image ────────────────────────────────────────────── */}
+      {/* ── Hero ──────────────────────────────────────────────────── */}
       <div className="bp-hero">
         <img src={post.coverImage} alt={post.title} className="bp-hero__img" />
         <div className="bp-hero__overlay" />
         <div className="container bp-hero__content">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
             {post.category?.name && (
               <span className="tag" style={{ marginBottom: "1rem", display: "inline-block" }}>
                 {post.category.name}
@@ -144,91 +221,117 @@ export default function BlogPost() {
             <h1 className="bp-hero__title">{post.title}</h1>
             <div className="bp-hero__meta">
               {post.author?.username && (
-                <span>By <span style={{ color: "var(--gold)" }}>{post.author.username}</span></span>
+                <span>
+                  By <span style={{ color: "var(--gold)" }}>{post.author.username}</span>
+                </span>
               )}
-              {post.publishedAt && <span>{format(new Date(post.publishedAt), "MMMM d, yyyy")}</span>}
-              <span className="bp-hero__meta-item"><FiClock size={12} />{post.readTime} min read</span>
-              <span className="bp-hero__meta-item"><FiEye size={12} />{post.views} views</span>
+              {post.publishedAt && (
+                <span>{format(new Date(post.publishedAt), "MMMM d, yyyy")}</span>
+              )}
+              <span className="bp-hero__meta-item">
+                <FiClock size={12} />{post.readTime} min read
+              </span>
+              <span className="bp-hero__meta-item">
+                <FiEye size={12} />{post.views} views
+              </span>
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* ── Article content ───────────────────────────────────────── */}
-      <div className="container bp-content">
-        <Link to="/blog" className="back-link"><FiArrowLeft /> Back to Blog</Link>
+      {/* ── Content + Sidebar layout ──────────────────────────────── */}
+      <div className="container bp-layout">
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 0.6 }}>
-          {/* Tags */}
-          {post.tags?.length > 0 && (
-            <div className="bp-tags">
-              {post.tags.map((t) => <span key={t} className="tag">{t}</span>)}
-            </div>
-          )}
+        {/* ── Main column ─────────────────────────────────────────── */}
+        <div className="bp-main">
+          <Link to="/blog" className="back-link">
+            <FiArrowLeft /> Back to Blog
+          </Link>
 
-          {/* Body */}
-          <article
-            className="prose"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-            style={{ marginBottom: "3rem" }}
-          />
-
-          <div className="divider" />
-
-          {/* Comments */}
-          <section className="bp-comments">
-            <h3 className="bp-comments__heading">Leave a Comment</h3>
-
-            {approvedComments.length > 0 && (
-              <div className="bp-comments__list">
-                {approvedComments.map((c) => (
-                  <div key={c._id} className="glass bp-comment">
-                    <div className="comment-header">
-                      <span className="comment-author">{c.guestName}</span>
-                      <span className="comment-date">{format(new Date(c.createdAt), "MMM d, yyyy")}</span>
-                    </div>
-                    <p className="comment-body">{c.content}</p>
-                  </div>
-                ))}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            {/* Tags */}
+            {post.tags?.length > 0 && (
+              <div className="bp-tags">
+                {post.tags.map((t) => <span key={t} className="tag">{t}</span>)}
               </div>
             )}
 
-            <form onSubmit={submitComment} className="glass bp-comment-form">
-              <div className="bp-form-row">
-                <div className="form-group">
-                  <label>Name *</label>
-                  <input
-                    value={comment.guestName}
-                    onChange={(e) => setComment((p) => ({ ...p, guestName: e.target.value }))}
-                    placeholder="John Doe"
-                  />
+            {/* Body */}
+            <article
+              className="prose"
+              dangerouslySetInnerHTML={{ __html: post.content }}
+              style={{ marginBottom: "3rem" }}
+            />
+
+            <div className="divider" />
+
+            {/* Comments */}
+            <section className="bp-comments">
+              <h3 className="bp-comments__heading">Leave a Comment</h3>
+
+              {approvedComments.length > 0 && (
+                <div className="bp-comments__list">
+                  {approvedComments.map((c) => (
+                    <div key={c._id} className="glass bp-comment">
+                      <div className="comment-header">
+                        <span className="comment-author">{c.guestName}</span>
+                        <span className="comment-date">
+                          {format(new Date(c.createdAt), "MMM d, yyyy")}
+                        </span>
+                      </div>
+                      <p className="comment-body">{c.content}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <form onSubmit={submitComment} className="glass bp-comment-form">
+                <div className="bp-form-row">
+                  <div className="form-group">
+                    <label>Name *</label>
+                    <input
+                      value={comment.guestName}
+                      onChange={(e) => setComment((p) => ({ ...p, guestName: e.target.value }))}
+                      placeholder="John Doe"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Email *</label>
+                    <input
+                      type="email"
+                      value={comment.guestEmail}
+                      onChange={(e) => setComment((p) => ({ ...p, guestEmail: e.target.value }))}
+                      placeholder="john@example.com"
+                    />
+                  </div>
                 </div>
                 <div className="form-group">
-                  <label>Email *</label>
-                  <input
-                    type="email"
-                    value={comment.guestEmail}
-                    onChange={(e) => setComment((p) => ({ ...p, guestEmail: e.target.value }))}
-                    placeholder="john@example.com"
+                  <label>Comment *</label>
+                  <textarea
+                    rows={4}
+                    value={comment.content}
+                    onChange={(e) => setComment((p) => ({ ...p, content: e.target.value }))}
+                    placeholder="Share your thoughts..."
                   />
                 </div>
-              </div>
-              <div className="form-group">
-                <label>Comment *</label>
-                <textarea
-                  rows={4}
-                  value={comment.content}
-                  onChange={(e) => setComment((p) => ({ ...p, content: e.target.value }))}
-                  placeholder="Share your thoughts..."
-                />
-              </div>
-              <p className="bp-comment-notice">Comments are reviewed before being published.</p>
-              <button type="submit" className="btn btn-gold" disabled={submitting}>
-                {submitting ? "Submitting..." : <><FiSend /> Submit Comment</>}
-              </button>
-            </form>
-          </section>
-        </motion.div>
+                <p className="bp-comment-notice">
+                  Comments are reviewed before being published.
+                </p>
+                <button type="submit" className="btn btn-gold" disabled={submitting}>
+                  {submitting ? "Submitting..." : <><FiSend /> Submit Comment</>}
+                </button>
+              </form>
+            </section>
+          </motion.div>
+        </div>
+
+        {/* ── Sidebar ─────────────────────────────────────────────── */}
+        <PostSidebar currentSlug={slug} />
+
       </div>
 
       {/* ── Related posts ─────────────────────────────────────────── */}
