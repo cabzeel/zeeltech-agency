@@ -149,9 +149,8 @@
 }*/
 
 .team-card__avatar-skeleton {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+  width: 100%;
+  height: 280px;
   margin: 0 auto 1rem;
 }
 
