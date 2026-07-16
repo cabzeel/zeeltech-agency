@@ -701,9 +701,8 @@ textarea { resize: vertical; min-height: 120px; }
 .team-card:hover { border-color: var(--border-gold); }
 
 .team-card__avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
+  width: 200px;
+  height: 200px;
   object-fit: cover;
   border: 2px solid var(--border-gold);
   margin: 0 auto 1rem;

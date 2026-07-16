@@ -107,14 +107,7 @@
   border-color: var(--border-gold);
 }
 
-.team-card__avatar {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  border: 2px solid var(--border-gold);
-  margin: 0 auto 1rem;
-  display: block;
-}
+
 
 .team-card__name {
   font-family: var(--font-mono);
