@@ -61,11 +61,35 @@ export async function prerender(data) {
 
   const { helmet } = helmetContext
 
-  return {
-    html,
-    head: helmet
-      ? `${helmet.title.toString()}${helmet.meta.toString()}${helmet.link.toString()}`
-      : '',
-    links: new Set(),
+  // IMPORTANT: vite-prerender-plugin expects `head` as an object —
+  // { title: string, lang?: string, elements: Set<{ type, props }> } —
+  // NOT an HTML string. Passing a string here means `head.title` and
+  // `head.elements` are both `undefined` inside the plugin, so the
+  // injection silently no-ops and every route keeps the base
+  // index.html's static <title>/<meta> tags forever. toComponent()
+  // (rather than toString()) gives us real {type, props} objects that
+  // match what the plugin's serializer expects.
+  const head = { elements: new Set() }
+
+  if (helmet) {
+    const titleNode = helmet.title.toComponent()[0]
+    if (titleNode) {
+      const children = titleNode.props?.children
+      head.title = Array.isArray(children) ? children.join('') : (children || '')
+    }
+
+    for (const el of [...helmet.meta.toComponent(), ...helmet.link.toComponent()]) {
+      // Drop react-helmet-async's internal `data-rh` boolean marker and
+      // coerce every remaining value to a string — the plugin's enc()
+      // calls .replace() directly on each prop value, which throws on
+      // non-strings like the boolean `data-rh: true`.
+      const { 'data-rh': _rh, ...rest } = el.props || {}
+      const props = Object.fromEntries(
+        Object.entries(rest).map(([k, v]) => [k, String(v)])
+      )
+      head.elements.add({ type: el.type, props })
+    }
   }
+
+  return { html, head, links: new Set() }
 }
