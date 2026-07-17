@@ -10,20 +10,20 @@ import "./About.css";
 
 const values = [
   {
-    title: "Craftsmanship",
-    desc: "We treat every project as a work of craft — obsessing over the details that make the difference between good and exceptional.",
+    title: "Built to Prove It",
+    desc: "Local SEO, structured data, and quote funnels ship with every site — not upsold later. The goal isn't a pretty homepage, it's more quote requests.",
   },
   {
-    title: "Transparency",
-    desc: "No surprises. We communicate openly about timelines, costs, and challenges throughout every engagement.",
+    title: "Direct Line to the Builder",
+    desc: "No account managers, no relay chain. You talk to the person actually building your site, and you'll see a working prototype within two weeks.",
   },
   {
-    title: "Innovation",
-    desc: "We stay ahead of the curve, adopting emerging technologies and design trends to give our clients a competitive edge.",
+    title: "Cameroon-Built, International Standard",
+    desc: "Based in Cameroon, working daily with clients across the US, UK, and Canada — the same craft and turnaround wherever your business operates.",
   },
   {
-    title: "Partnership",
-    desc: "We are not just vendors — we are invested partners in your success, thinking about your goals as if they were our own.",
+    title: "Timelines You Can Plan Around",
+    desc: "Foundation in 1–2 weeks, Growth in 2–3, Authority in 3–5 — clear from the first call, with rush delivery available if you're racing a deadline.",
   },
 ];
 
@@ -39,10 +39,10 @@ export default function About() {
   return (
     <PageWrapper>
       <Helmet>
-        <title>About ZeelTech | Web Agency from Cameroon Serving the US & UK</title>
+        <title>About ZeelTech | Web Agency Built for Commercial Service Contractors</title>
         <meta
           name="description"
-          content="ZeelTech Web Solutions is a professional web agency based in Cameroon, building websites for chiropractors and small businesses across the US, UK, Canada and Australia."
+          content="ZeelTech is a web agency based in Cameroon, building credibility-first websites and lead generation systems for commercial service contractors across the US, UK, and Canada."
         />
         <link rel="canonical" href="https://zeeltechsolutions.com/about" />
       </Helmet>

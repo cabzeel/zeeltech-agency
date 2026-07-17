@@ -3,12 +3,21 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Helmet } from 'react-helmet-async'
-import { FiArrowRight, FiCode, FiSmartphone, FiLayout, FiTrendingUp, FiCheck } from 'react-icons/fi'
+import { FiArrowRight, FiCode, FiSmartphone, FiLayout, FiTrendingUp, FiCheck, FiMapPin } from 'react-icons/fi'
 import PageWrapper from '../../components/ui/PageWrapper'
 import SectionHeader from '../../components/ui/SectionHeader'
 import api from '../../utils/api'
 
-const iconMap = { 'web-development': <FiCode />, 'mobile-app-development': <FiSmartphone />, 'ui-ux-design': <FiLayout />, 'digital-marketing': <FiTrendingUp /> }
+const iconMap = {
+  'credibility-website': <FiLayout />,
+  'quote-generation': <FiTrendingUp />,
+  'local-seo': <FiMapPin />,
+  // legacy slugs kept for any older DB entries
+  'web-development': <FiCode />,
+  'mobile-app-development': <FiSmartphone />,
+  'ui-ux-design': <FiLayout />,
+  'digital-marketing': <FiTrendingUp />,
+}
 
 export default function Services() {
   const [services, setServices] = useState([])
@@ -23,8 +32,8 @@ export default function Services() {
   return (
     <PageWrapper>
       <Helmet>
-        <title>Web Design Services | ZeelTech – Websites, SEO & Web Apps</title>
-        <meta name="description" content="ZeelTech offers professional web design, SEO, web applications and digital marketing for chiropractors and small businesses. Fast turnaround. Competitive pricing." />
+        <title>Services | Websites, Local SEO & Quote Funnels for Service Contractors</title>
+        <meta name="description" content="ZeelTech builds credibility-first websites, local SEO, and quote request systems for commercial service contractors — fire protection, commercial cleaning, and facility service companies." />
         <link rel="canonical" href="https://zeeltechsolutions.com/services" />
       </Helmet>
 
@@ -33,12 +42,12 @@ export default function Services() {
         <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(240,180,41,0.07) 0%, transparent 70%)' }} />
         <div className="container" style={{ position: 'relative' }}>
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="section-label" style={{ justifyContent: 'center' }}>What We Do</span>
+            <span className="section-label" style={{ justifyContent: 'center' }}>What We Build</span>
             <h1 style={{ maxWidth: 680, margin: '0 auto 1.5rem' }}>
-              End-to-End <span className="gold-gradient">Digital Services</span>
+              Get Found. <span className="gold-gradient">Get Trusted.</span> Get the Call.
             </h1>
             <p style={{ maxWidth: 540, margin: '0 auto', fontSize: '1.1rem' }}>
-              From your first idea to a live, revenue-generating product — we are the only digital partner you need.
+              Three services, one outcome — more qualified quote requests. Built specifically for commercial service contractors, not tech startups.
             </p>
           </motion.div>
         </div>
@@ -63,11 +72,11 @@ export default function Services() {
           <SectionHeader label="Why Zeeltech" title="The |Zeeltech| Advantage" center />
           <div className="grid-3" style={{ gap: '1.25rem' }}>
             {[
-              { title: 'Full-Stack Capability', desc: 'One team handles design, frontend, backend, and deployment — no fragmented vendors, no communication gaps.' },
-              { title: 'Agile & Transparent', desc: 'Weekly sprints, live demos, and real-time project boards so you always know where things stand.' },
-              { title: 'Results-Oriented', desc: 'We measure success by your outcomes — conversions, revenue, retention — not by lines of code shipped.' },
-              { title: 'Post-Launch Support', desc: 'Our relationship does not end at launch. We offer ongoing support, hosting, and iteration services.' },
-              { title: 'SEO-Ready from Day One', desc: 'Every product we build is engineered with Core Web Vitals, semantic HTML, and SEO best practices baked in.' },
+              { title: 'No Handoffs, No Lost Details', desc: 'One person builds your design, code, and SEO together — not a designer, a developer, and an SEO vendor who\'ve never spoken.' },
+              { title: 'A Prototype in Two Weeks', desc: 'You see real progress fast, not a black box until launch day. Most projects go live in 4–8 weeks total.' },
+              { title: 'Measured by Quote Requests', desc: 'We track the same number you do: how many quote requests the site generates. That is the actual measure of success.' },
+              { title: 'Support After You Go Live', desc: 'Hosting, updates, and fixes do not stop at launch — your site keeps working while you are out on jobs.' },
+              { title: 'Local SEO Baked In', desc: 'Service-area pages, structured data, and Google Business integration ship with every site, not sold as an upsell later.' },
               { title: 'African Roots, Global Standards', desc: 'Based in Cameroon, we understand emerging markets while building to international quality benchmarks.' },
             ].map((item, i) => {
               const [ref, inView] = useInView({ triggerOnce: true })

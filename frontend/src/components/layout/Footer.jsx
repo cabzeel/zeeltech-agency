@@ -3,7 +3,7 @@ import { FiLinkedin, FiInstagram, FiTwitter, FiGithub, FiMail, FiFacebook } from
 
 const footerLinks = {
   Company:  [{ to: '/about', label: 'About Us' }, { to: '/projects', label: 'Our Work' }, { to: '/pricing', label: 'Pricing' }],
-  Services: [{ to: '/services/web-development', label: 'Web Development' }, { to: '/services/mobile-app-development', label: 'Mobile Apps' }, { to: '/services/ui-ux-design', label: 'UI/UX Design' }, { to: '/services/digital-marketing', label: 'Digital Marketing' }],
+  Services: [{ to: '/services/credibility-website', label: 'Credibility-First Websites' }, { to: '/services/quote-generation', label: 'Quote Request Systems' }, { to: '/services/local-seo', label: 'Local SEO Foundation' }],
   Resources:[{ to: '/blog', label: 'Blog' }, { to: '/contact', label: 'Contact' }],
 }
 
@@ -19,7 +19,7 @@ export default function Footer() {
               <span style={{ fontFamily:'var(--font-mono)',fontWeight:600,fontSize:'1.1rem' }}>ZEEL<span style={{ color:'var(--gold)' }}>TECH</span></span>
             </Link>
             <p style={{ fontSize: '0.9rem', lineHeight: 1.8, maxWidth: 280, marginBottom: '1.5rem' }}>
-              A full-service digital agency crafting exceptional web, mobile, and marketing experiences for ambitious brands.
+              Websites built for one job: more quote requests for commercial service contractors — built in Cameroon, serving the US, UK, and Canada.
             </p>
             <div style={{ display: 'flex', gap: '0.75rem' }}>
               {[
